@@ -1,3 +1,16 @@
+				// this.position = new THREE.Vector3();
+
+				// this.update = function ( camera ) {
+
+				// 	var distance = this.position.distanceTo( camera.position );
+
+				// 	if ( distance <= radius ) {
+				// 		audio.volume = volume * ( 1 - distance / radius );
+				// 	} else {
+				// 		audio.volume = 0;
+				// 	}
+				// }
+
 
 // --------------------------
 // waves-ishes
@@ -58,27 +71,25 @@ var WAVES = (function(){
 
 			// and move it forward dependent on the mouseY position.
 			bird.position.z += 1; //mouseY * 0.1;
-			bird.gain.gain.value += 0.0005;		//		1 / 2000th
+			bird.volume.gain.value += 0.0005;		//		1 / 2000th
 			bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
 			bird.geometry.vertices[ 5 ].y = bird.geometry.vertices[ 4 ].y = Math.sin( bird.phase ) * 5;
 
 			// if the bird is too close move it to the back
 			if (bird.position.z > 1000) {
 				bird.position.z -= 2000;
-				bird.gain.gain.value = 0;
+				bird.volume.gain.value = 0;
 
 
-				if (~~(Math.random(1)*2)) {
-					// bird.sound.stop();
-					// bird.sound.start(0);	// start again from 0
-					if (mal) {
-						bird.sound.buffer = buffers[3];			// load "screaming"
-						bird.sound.buffer.loopEnd = bird.sound.buffer.duration;
-					} else {
-						bird.sound.buffer = buffers[0];			// load "ambience"
-						bird.sound.buffer.loopEnd = bird.sound.buffer.duration;
-					}
-				}
+				// if (~~(Math.random(1)*2)) {
+				// 	if (mal) {
+				// 		bird.sound.buffer = buffers[3];			// load "screaming"
+				// 		bird.sound.buffer.loopEnd = bird.sound.buffer.duration;
+				// 	} else {
+				// 		bird.sound.buffer = buffers[0];			// load "ambience"
+				// 		bird.sound.buffer.loopEnd = bird.sound.buffer.duration;
+				// 	}
+				// }
 
 			}
 
@@ -125,14 +136,20 @@ var WAVES = (function(){
 
 
 			// drone = sources[i];		// loadWaveTables haven't yet loaded Create ref and.....?
-			bird.sound = context.createBufferSource();
-			bird.sound.loop = true;
+			// bird.sound = context.createBufferSource();
+			// bird.sound.loop = true;
 
-			bird.gain = context.createGain();
-			bird.gain.gain.value = 0.0; 		// TBD by distance
+			bird.sound = context.createOscillator();
+			bird.sound.frequency.value = bird.position.y;
+			// bird.sound.start();
 
-			bird.sound.connect(bird.gain);
-			bird.gain.connect(context.destination);
+
+
+			bird.volume = context.createGain();
+			bird.volume.gain.value = 0.0; 		// TBD by distance
+
+			bird.sound.connect(bird.volume);
+			bird.volume.connect(context.destination);
 
 			///////////////////////////////////////////////////////////////////////////////////////
 
@@ -246,9 +263,16 @@ var WAVES = (function(){
 		mouseY = event.clientY;
 	}
 
-	function onResize(event) {
+	function onWindowResize() {
+		windowHalfX = window.innerWidth / 2;
+		windowHalfY = window.innerHeight / 2;
+
+		camera.aspect = window.innerWidth / window.innerHeight;
+		camera.updateProjectionMatrix();
+
 		renderer.setSize( window.innerWidth, window.innerHeight );
 	}
+
 
 
 	// --------------------------------------------------
@@ -325,7 +349,7 @@ var WAVES = (function(){
 
 			// add event listeners
 			document.addEventListener( 'mousemove', onMouseMove, false );
-			document.addEventListener( 'resize', onResize, false );
+			document.addEventListener( 'resize', onWindowResize, false );
 
 			initAudio();
 			initVideo();

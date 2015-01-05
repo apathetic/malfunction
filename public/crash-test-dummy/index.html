@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>SMASH YOUR FRIENDS</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="IE=11" />
+	<style>
+		* { margin:0; padding:0; border:0; font-size:100%; vertical-align:baseline; }
+		article, aside, footer, header, nav, section { display:block; }
+		body, html { height:100%; overflow: hidden; }
+		header { position:absolute; top:0; left:0; height:200px; width:100%; background:rgba(0,0,0, 0.9); transition: all 0.3s; transform: translateY(-200px); }
+		header.active { transform: translateY(0); }
+		header button { cursor:pointer }
+		#drop-zone { height:100%; width: 100%; }
+		#face { height:90%; float:left; }
+	</style>
+</head>
+<body>
+
+	<header id="controls">
+		<div id="drop-zone">
+			<img id="face" src="/crash-test-dummy/images/wesley.jpg" />
+			<form id="file-chooser">
+				<p>Want to use a file input instead?</p>
+				<div>
+					<input name="source-file" id="source-file" type="file" />
+				</div>
+				<div>
+					<input type="submit" />
+				</div>
+			</form>
+		</div>
+		<button id="toggle">+</button>
+	</header>
+
+	<main id="container"></main>
+
+
+<!-- <div id='interface'> -->
+    <!-- <input type="button" value="demo 1" onClick=CTD.populate(1)> -->
+    <!-- <input type="button" value="demo 2" onClick=populate(2)> -->
+    <!-- <input type="number" name="quantity" min="10" max="2000" value="32"  id='MaxNumber'> -->
+    <!-- <input type="submit" onClick=populate()> -->
+    <!-- <input type="button" value="collision off" onClick=switchCollision() id="col"> -->
+    <!-- <input type="number" name="gravity" min="-20" max="20" value="-1" id='gravity' onChange=gravity() > -->
+<!-- </div> -->
+
+<!-- <div id='info'></div> -->
+
+	<script src="/crash-test-dummy/js/three.min.js"></script>
+	<script src="/crash-test-dummy/js/oimo.min.js"></script>
+
+	<script src="/crash-test-dummy/js/CTD.js"></script>
+	<script src="/crash-test-dummy/js/drag-n-drop.js"></script>
+	<script src="/crash-test-dummy/js/controls.js"></script>
+
+	<script>CTD.scene.init()</script>
+	<script>CTD.physics.init()</script>
+	<script>CTD.ragdoll.init()</script>
+	<script>CTD.image.init()</script>
+
+	<script>
+		// REVERSE GRAVITY after 25 seconds. JUST BECAUSE.
+		setTimeout(function(){
+			CTD.physics.gravity(0.001);
+		}, 18000);
+	</script>
+
+</body>
+</html>
