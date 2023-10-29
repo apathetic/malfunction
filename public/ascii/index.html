@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title></title>
+	<meta name="robots" content="noindex,nofollow">
+	<style>
+		* { font: 2.07vw Courier, Monaco, monospace; padding:0px; margin:0px; border:0px; background:black; color:silver; }
+	</style>
+
+	<script>
+		var nLines = 50, nRows = 80;
+		var iFPS = 24;
+		var chars = "  ``^^''\"\"*+-~=rcvunoeaszmwxgqypjt&dfhkb?27TYFPV3456890%$UOZRBNXWMQHGAKESDCJLI1li;:\\\\\\/////][)(}{|!!..,,__";
+		var solidChars = "3489ABDEGHKMNRSWXZ";
+
+		var randomLine = "####################################################################################";
+		var solidRandomLine = "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@";
+		var emptyLine = "                                                                                    ";
+		var random = [
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine,
+			randomLine, randomLine, randomLine, randomLine, randomLine
+		];
+		var solidRandom = [
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+			solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine, solidRandomLine,
+		];
+		var wes = [
+			"                             .. ......,'''''............                        ",
+			"                          .........''''.'................                       ",
+			"                       .....................    .    .....                      ",
+			"                       .'',....  ...               ..  .. .   .                 ",
+			"                       ..'...    ....               .      ..                   ",
+			"                      ..','.    ...    .                  ..                    ",
+			"                      .''''.  ..   .   .                     .                  ",
+			"                      ..........           ............  ...  .                 ",
+			"                  .  ... .'....     ......,:loddl:,'....   ..                   ",
+			"                ...  ........... ......'cdkO00000Od:;,'.                        ",
+			"                ...... ..  ...... .,;clxKXXXXKK000kxol:;'.                      ",
+			"              .......  .  ........'cx0XXXXXXXXKK00kxdolc;'.                     ",
+			"             ........   ......''..ck0XXXXXXXXXKK00kxxdlc:,'.                    ",
+			"            .......    ........',';xKXK0kxxxxkO00Okdxdlc:;,'.                   ",
+			"         ........   .. .''.....,codOKKK0kdoccldkOOxlll;,''''.                   ",
+			"          ..........'. ..,.....:dO000K0kdocccox0KKx:;,.......                   ",
+			"           .........'...,.....,lOKXXKOxl'';;,;l0XXx;..',;;,'.                   ",
+			"          ..'...'..','.''....,oOKXXXNXX0kolccoOXXXk:...  ....                   ",
+			"          .'..... ..;'.'. ...o0XXNNNNXXK0000KXXNXXOl'....'...                   ",
+			"           ....... ...,'.,'.'xKXXNNNNNXXXXXXNNNNXK0o;'',,,,,.                   ",
+			"            .'....   .llooc,:OKXXXNNNNXXXXXXNNXKXXOo:,',,,,,.                   ",
+			"             .  ...   :00OlcoOKXXXXXXXXXKXXXXKookOl,',',,,,,.                   ",
+			"             ..     . .,c::cdO0KK00KKXKKKXXXK0Oxdc'.',,,,;,'                    ",
+			"              ...  .. .'. ;oxOkxxxxOK0koooodlc;......'''''..                    ",
+			"                ..     ...:ddxdoolxO0x:';oddool:,,.. ..... .                    ",
+			"                  ..   ...lxloolccokxl;loodlccc:;'....                          ",
+			"                   ..   ..dOocccccloc:dKKKKK0d:c:'....                          ",
+			"                   ..   .'OXk:;;;;:,';d0K0Okxocc:,....                          ",
+			"                    ..   :XXKkc,','.',:okOkxl;'......                           ",
+			"                     .. .kXXXX0d;'..,;;;:clddol;..                              ",
+			"                  ....  cXNXXXXXOl,..'......';;'.                               ",
+			"                 ;:..'':0NNNXXXXXKOo;'.....  ..                                 ",
+			"               .od';:';ONNNNXXXXXXK0Oo:'..                                      ",
+			"              ,dkdco.,OXNNNXXXXXXXXXK0Okd:'.....''.                             ",
+			"            .lxkOdlo.cKXXNXXXXXXXXXXXKK0kl:;,',;;'.                             ",
+			"         .':xkxkOxcOc;xKXXXXXXXXXXXXXKKKkoc:::::;'.'                            ",
+			"      .,l::xOOkkOkcxKl;x0KKKKXXXXXXXXK0kxdoolllc:..:;.                          ",
+			"   ':llco;:kkOOkOOoc0Xo;lxOO0KKKXXXXXKOxxxxdddol:..ld:                          ",
+			"   xdc,co;lOOOOkOOx:dXXd::ldkOO00KKK0Okxxxxxxxdoc..k0x.   ..                    ",
+			"   xc.'lo:xOOkOOOo,,cxK0Ol:codxxkkOOkxxxxxxxxxdo:';KXO,  ...                    ",
+			"   d,.'lookOOOOx'  'olldXXkc:looooddddxxxxkkxxdlc;dKkOc  .                      ",
+			"   :...:okOOOk:.  .dd:;:okKOc:clllloodxxxkkxxdolcl0dlOo                         ",
+			"   ,...;oOOOo.    .x,.;;;:d0kc:cllllodxkkkkxxdoox0k;lk,                         ",
+			"   .. .;dOo'       ;. ..,;:oOkollllloxkOOOOkkkx0Xx'.oc                          ",
+			"   .  .;o:.    .   .......',;ldxxlcloxkO000KKXXNx. ,l.                          ",
+			"     ..,:;,'.  ',. .....cd:',:clxkdcloxOKKK000ko.  '.                           ",
+			"      .,;';:. .,c;....''.;;,,,:loxOdldxkxdlll:,...                              ",
+			"      .'''::.  'cc;. ..',.';,,,:lodkkxxddllc:,'.                         ..     ",
+			"      ...'c;   .clc,. ..,;';:,,,;:dkOOxdoc:;.                      ..   ...     ",
+			"       ..,c'   .:ll:'. .';;;cc;,,,lxkkdl:.                  .  .   .......  .   "
+		];
+
+		var stress = [
+			"                    ..............................................              ",
+			"                   ...............................................              ",
+			"                   ...............................................              ",
+			"                  ................................................              ",
+			"                 ...............',:loddddddol:,'..................              ",
+			"                 .............cx0KKKKKKKKKKKKK0Od:................              ",
+			"                ............;kKK00000KKKKKK00000KKx;..............              ",
+			"               ............,kKK000KK0kxxxxk0KKKK0Oxc..............              ",
+			"               ............c0KK00KK0c......'lxdc,'................              ",
+			"              .............c0KK000K0kolcc:;,'.....................              ",
+			"             ..............'xKK00000KKKKKKK00Oko:'................              ",
+			"             ...............'dKKK0000000000000KKKOo'..............              ",
+			"             .................,okO0KKKKKKKKK00000KKx'.............              ",
+			"             .....................,;;:clodk0KK0000K0c.............              ",
+			"             ...................';,........;OKK000KKo.............              ",
+			"             ...............':ok0KOo;'....,o0K0000KKl.............              ",
+			"             ..............:OKKK00KKK0OOOO0KK0000KKx,.............              ",
+			"             ...............;x0KK0000KKKKK00000KK0d,..............              ",
+			"             .................,lk0KKKKKKKKKKKK0kl,................              ",
+			"             .....................,:clllllcc;,'...................              ",
+			"             .....................................................              ",
+			"             .....................................................              ",
+			"             .....................................................              ",
+			"             .....................................................              ",
+			"             .....................................................              ",
+			"             ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;,              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO00000000000000000000000000000000000000000000000000O              ",
+			"             xO000000000000000000000000000000000000000000000000K0O              ",
+			"             xO0000000000000000000000000000000000000000000000000O:              ",
+			"             xO00000000000000000000000000000000000000000000000K0c               ",
+			"             xO000000000000000000000000000000000000000000000000d.               ",
+			"             xO00000000000000000000000000000000000000000000000O,                ",
+			"             xO0000000000000000000000000000000000000000000000Oc                 ",
+			"             xO0000000000000000000000000000000000000000000000d.                 ",
+			"             xO000000000000000000000000000000000000000000000k,                  ",
+			"             xO00000000000000000000000000000000000000000000Oc                   ",
+			"             xOOOOOOOOOOOOOOOOOOOOOOOOOOO000000000000000000x.                   "
+		];
+
+		var colin = [
+			"??????????????????????????????III??++++++++?????????????????????????????????????",
+			"??????????????????????????I777I?+=++=+==+++++++++???????????????????????????????",
+			"?????????????????????????I7777I?++++++++++++++++++?++???????????????????????????",
+			"???????????????IIIIIIII?I77777II??+++?+++++++++???????+?????????????????????????",
+			"????????????IIIIIIIIIIIII7777777III??????????????IIIII?++???????????????????????",
+			"????????IIIIIIIIIIIIIIII77777777IIIIIIIIIIIIIIIIIIIIII?+=+I?????????????????????",
+			"?????I?IIIIIIIIIIIIIIIII77777777IIIIIII?III??????+++++++==?II???????????????????",
+			"????IIIIIIIIIIIIIIIIIII7777777777IIIIIIIII???????++++++++=+IIII?????????????????",
+			"?IIIIIIIIIIIIIIIIIIIII77777777777IIIIIIIII?I??????+++++++++?IIIIII??????????????",
+			"IIIIIIIIIIIIIIIIIIIIII777777777777IIIIIIIII???????++?+++++++IIIIIII?????????????",
+			"IIIIIIIIIIIIIIIIIIIIII7777777777777IIIIIIII?I7??????++++++++IIIIIIIII?I?????????",
+			"IIIIIIIIIIIIIIIIIIIII777777777777777IIIIIII??7I?????++++++++IIIIIIIIIII?????????",
+			"IIIIIIIIIIIIIIIIIIIII7777777777777777IIII??+++++++++???+?+++IIIIIIIIIIII?II?????",
+			"IIIIIIIIIIIIIIIIIIII7777777777777I+=++++?+????????????++++++?IIIIIIIIIIIIIII????",
+			"IIIIIIIIIIIIIIIIIIII77777777I=~::~:~~:::::,,,+++?????????????++==+IIIIIIIIII????",
+			"IIIIIIIIIIIIIIIIII77777?=~~~~~===~~~~~~~~~~:::...:+++??????????++++==?IIIIIIII??",
+			"IIIIIIIIIIIIIII777?+==~~===========~~~~:~~~:::,......,++++?+?????+++++=?IIIIII??",
+			"IIIIIIIIIIIII7????II+=====+++=~~:::::~::::~~:::...,......:++????+?++++++?III?III",
+			"IIIIIIIIIII??????III==+++++=~::~==++====~~~~~~~,.......:~::~=++++++++++=?IIIIIII",
+			"IIIIIIII????????III=::::=++=~~:::..::::==~~~~~~:.....,~::~,~~==++++++++?IIIIIIII",
+			"IIIIIIIIIIIIII??IIII==:::?+~:~:==,,=~:~=++==~~~:,:.,:~=:~~::~+++++++++IIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIII?..:??=~~~:===++++++++==~~~~~~~~~:,,:==,+++++++IIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIII77II~=I+==+==++???????++=~~~~::::~~~,:~~=:+++?IIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIII7777?II?===+++???I????++=~~~~~:::~==:::=:~IIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIII777I?II?~~==+??IIII??+++=~~~~::::~=:==~~~,IIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIII777I7?==~=~~IIII???++===~~~::~::~~=++=~,IIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIII777I?+~..+~:+III???+====~~~::::~~:++==.?IIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIII7777II=~~~~+??II??++=====~~~~~~::~~:~+7IIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIII777II?+?==++++??++===~~=~=~~:~:~~~~~,7IIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIII777I?+=?++++=+++=+++~~~~=~~~::~~~~~=IIIIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIII777+II?===+=+??=====~~~~=~~::::~~~=+7IIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIII77+?:=+???++??+==~~~::~~~~:::~~~~+7IIIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIII77I???==+???++=~~::~~::~~~::~~~~~+7IIIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIIII77+??+?+???+=~~::::~~~::::::~~~~=7IIIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIIIII77=+++??I+=~::::::~:~~::::::~~~=IIIIIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIIIII777===+====~::,,~,::~~:~~~~~~~==:~?IIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIIIIIII7?=~~~~~:~::,::,:~,::::~~~~~~~~,+IIIIIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIIIIIII77?=~::::,~,~~:::::~::~~~=~~~~::??=+IIIIIIIIIIIIIIIIII",
+			"IIIIIIIIIIIIIIIIIIIIIIIIIIIIII7=:===~::,,::::::~~~===~~::I??++??IIIIIIIIIIIIIII?",
+			"IIIIIIIIIIIIIIIIIIIIIIIIIIIIII7?I??~:~:~~::~~~~~~==~~~:7???+++??+?IIIIIIIIIIII??",
+			"IIIIIIIIIIIIIIIIIIIIIIIIIIIIII77~??+++======~~=====~~7I?II+?+?I?+???IIIIIIIII???",
+			"IIIIIIIIIIIIIIIIIIIIIIIIIIIII7777I?????+++========77III77?+++II????I?????I?I????",
+			"IIIIIIIIIIIIIIIIIIIIIIIIIIIII777777=???????+===I7IIII777?+??+7II???III?II???????",
+			"IIIIIIIIIIIIIIIIIIIIIIIIIIIII777777777+?????=777I777777????+77II????IIII7II?IIII",
+			"?IIIIIIIIIIIIIIIIIIIIIIIIIII777777777777I7777777777777?+??I777II??IIIII+777IIIII",
+			"???IIIIIIIIIIIIIIIIIIIIIII7777777777777?I7I7777777777?+?II7777III?IIIIII?777IIII",
+			"????IIIIIIIIIIIIIIIIIII77777777777777+?77?I777777777I??I+I7777IIIIIIIIII+I777II?",
+			"????IIIIIIIIIIIIIIIII777777777777777==+I77777777777IIII+?7777II77IIIIII==I7777II",
+			"???????IIIIIIIIIIII777777777777777.~=+I77777777777III~++?7777III77II:=?II77II77I",
+			"????????IIIIIIII77777777777777777...+I7777777I77777I~+++I7777II777I77I?II77II777"
+		];
+
+		// higher pow is "faster" transition
+		var timeLineData = [
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage: random,  toImage:      stress, pow:0.2 }}, //stress
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage: stress,  toImage:      random, pow:2.0 }},
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage: random,  toImage:       colin, pow:0.2 }},
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage:  colin,  toImage:       colin, pow:1.0 }}, // colin
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage:  colin,  toImage:      random, pow:5.0 }},
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage: random,  toImage:         wes, pow:1.0 }}, // wes
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage:    wes,  toImage:         wes, pow:1.0 }},
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage:    wes,  toImage:      random, pow:5.0 }},
+			{ time:5.000,  func:asciiImageFader,  arg:{ fromImage: random,  toImage:      stress, pow:0.2 }}, // stress
+			{ time:3.000,  func:asciiImageFader,  arg:{ fromImage: stress,  toImage: solidRandom, pow:5.0 }}
+		];
+
+		var startDate = new Date();
+		var iShiftPhase = 0;
+		var nShift = 20;
+
+		function thread() {
+			var nTime = (new Date() - startDate) / 1000; // Time sinds start
+			var nTimeLineTime = 0;
+			for (var i = 0; i < timeLineData.length; i++) {
+				// If the elapsed time is smaller than the end time of our event, execute it.
+				if (nTime < nTimeLineTime + timeLineData[i].time) {
+					var iProgress = (nTime - nTimeLineTime) / timeLineData[i].time; // 0-1
+					timeLineData[i].func(iProgress, timeLineData[i].arg);
+					// Only execute one (the first) event.
+					setTimeout(arguments.callee, 1000/iFPS);
+					return;
+				} else {
+					// Calculate the time it would have taken to reach the events end.
+					nTimeLineTime += timeLineData[i].time;
+				}
+			}
+		}
+
+		function shiftFader() {
+			return nShift * Math.random() * Math.random() * Math.random() * Math.random() * Math.random();
+		}
+
+		function asciiImageFader(iProgress, aArgs) {
+			var sContents = "";
+			var nFader = Math.pow((1 - Math.cos(iProgress * Math.PI)) / 2, aArgs.pow); // 0-1 sine
+			var iShiftFader = shiftFader();
+			iShiftPhase += shiftFader();
+			var nRandom = (1 - Math.cos(iProgress * 2 * Math.PI)) / 2; // 0-1-0 sine
+			for (var line = 0; line < nLines; line++) {
+				iShift = iShiftFader * Math.cos(Math.PI * 2 * line / nLines + iShiftPhase);
+				for (var row = 0; row < nRows; row++) {
+					var nShiftRow = (row + nRows + iShift) % nRows;
+					var nCharFrom = getChar(aArgs.fromImage, line, nShiftRow);
+					var nCharTo   = getChar(aArgs.toImage, line, nShiftRow);
+					var nChar     = nCharFrom + (nCharTo - nCharFrom) * nFader;
+//					nChar        += (Math.random() - 0.5 ) * chars.length * nRandom;
+					// Displayed character = random static + real character
+					while (nChar < 0) nChar += chars.length;
+					sContents += chars.charAt(nChar % chars.length);
+				}
+				sContents += "<br />";
+			}
+			document.body.innerHTML = "<pre>" + sContents + "</pre>";
+		}
+
+		function getChar(asSourceImage, line, row) {
+
+			// console.log("line: "+line+"   souceAtLine:"+asSourceImage[line]);
+
+			sChar = asSourceImage[line].charAt(row);
+			switch (sChar) {
+				case "#": // Random
+					sChar = chars.charAt(Math.floor(Math.random() * chars.length));
+					break;
+				case "@": // Random solid char
+					sChar = solidChars.charAt(Math.floor(Math.random() * solidChars.length));
+					break;
+			}
+			var nChar = (chars.indexOf(sChar) + chars.lastIndexOf(sChar)) / 2;
+			if (Math.random()<0.05) nChar += Math.random() * 5 - 2.5;
+			else nChar += Math.random() - 0.5;
+			return nChar;
+		}
+
+        window.onload = thread;
+
+	</script>
+
+	</head>
+	<body>
+
+
+	</body>
+</html>
