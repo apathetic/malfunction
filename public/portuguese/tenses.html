@@ -1,0 +1,277 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+<head>
+  <title>Portuguese Common Tenses</title>
+  <link rel="stylesheet" href="porto.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="ajax.js"></script>
+  <script type="text/javascript">
+
+var http = createRequestObject();
+
+function createRequestObject() {
+    var ro;
+    var browser = navigator.appName;
+    if (browser == "Microsoft Internet Explorer") {
+        ro = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    else {
+        ro = new XMLHttpRequest();
+    }
+    return ro;
+}
+
+function handleResponse() {
+    if (http.readyState == 4) {
+		var response = http.responseText;
+		var update = new Array();
+		if (response.indexOf('|' != -1)) {
+			update = response.split('|');
+            document.getElementById(update[0]).innerHTML = update[1];
+		}
+    }
+}
+
+function loadSection(action) {
+	http.open('get', 'irreg.php?action='+action);
+	http.onreadystatechange = handleResponse;
+	http.send(null);
+}
+
+function hideSection(arg) {
+	document.getElementById(arg).innerHTML = '<span class="tt">irregular<\/span> <a href="javascript:loadSection(\''+arg+'\')">(show &gt;&gt;)</a>';
+}
+
+  </script>
+</head>
+
+<body>
+
+
+<h1>Tenses :: <a href="verbos.html">Verbs</a></h1>
+
+<ul>
+  <li><a href="#present">present</a>
+  <li><a href="#past">past</a>
+  <li><a href="#future">future</a>
+  <li><a href="#imp">imperfect</a>
+  <li><a href="#cond">conditional</a>
+</ul>
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<div><a name="present"></a>
+
+  <h2>present</h2> 
+  
+  <span class="tp">simple</span>
+
+  <ul class="ind">
+    <ul class="horiz">
+      <li>fal<b>o</b></li>
+      <li>fal<b>as</b></li>
+      <li>fal<b>a</b></li>
+      <li>fal<b>amos</b></li>
+      <li>fal<b>am</b></li>
+    </ul>
+    <ul class="horiz">
+      <li>beb<b>o</b></li>
+      <li>beb<b>es</b></li>
+      <li>beb<b>e</b></li>
+      <li>beb<b>emos</b></li>
+      <li>beb<b>em</b></li>
+    </ul>
+    <ul class="horiz">
+      <li>abr<b>o</b></li>
+      <li>abr<b>es</b></li>
+      <li>abr<b>e</b></li>
+      <li>abr<b>imos</b></li>
+      <li>abr<b>em</b></li>
+    </ul>
+  </ul>
+  
+  <br />
+
+  <div id="present"><span class="tt">irregular</span> <a href="javascript:loadSection('present')">(show &gt;&gt;)</a></div>
+
+  <br />
+
+  <span class="tp">prolonged</span><br />
+
+  <span class="ind">estar a + <i>infinitive</i></span>
+
+</div>
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<a name="past"></a>
+<div>
+
+  <h2>past</h2>
+
+  <span class="tp">simple</span>
+
+  <ul class="ind">
+    <ul class="horiz">
+      <li>fal<b>ei</b></li>
+      <li>fal<b>aste</b></li>
+      <li>fal<b>ou</b></li>
+      <li>fal<b>&aacute;mos</b></li>
+      <li>fal<b>aram</b></li>
+    </ul>
+    <ul class="horiz">
+      <li>beb<b>i</b></li>
+      <li>beb<b>este</b></li>
+      <li>beb<b>eu</b></li>
+      <li>beb<b>emos</b></li>
+      <li>beb<b>eram</b></li>
+    </ul>
+    <ul class="horiz">
+      <li>abr<b>i</b></li>
+      <li>abr<b>iste</b></li>
+      <li>abr<b>iu</b></li>
+      <li>abr<b>imos</b></li>
+      <li>abr<b>iram</b></li>
+    </ul>
+  </ul>
+
+  <br /><br />
+
+  <div id="past"><span class="tt">irregular</span> <a href="javascript:loadSection('past')">(show &gt;&gt;)</a></div>
+
+  <br />
+
+  <span class="tp">recent</span><br />
+
+  <span class="ind">acabar de + <i>infinitive</i></span>
+
+  <ul class="ind">
+    <ul class="horiz">
+      <li>acabei</li>
+      <li>acabaste</li>
+      <li>acabou</li>
+      <li>acab&aacute;mos</li>
+      <li>acabaram</li>
+    </ul>
+  </ul>
+
+  <br />
+
+</div>
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<a name="future"></a>
+<div>
+
+  <h2>future</h2>
+
+  <span class="tp">indicative</span><br />
+
+  <ul class="ind">
+    <ul class="horiz">
+      <li>falar<b>ei</b></li>
+      <li>falar<b>&aacute;s</b></li>
+      <li>falar<b>&aacute;</b></li>
+      <li>falar<b>emos</b></li>
+      <li>falar<b>&atilde;o</b></li>
+    </ul>
+  </ul>
+
+  <br /><br />
+
+  <div id="future"><span class="tt">irregular</span> <a href="javascript:loadSection('future')">(show &gt;&gt;)</a></div>
+  
+  <br />
+
+  <span class="tp">near</span><br />
+
+  <span class="ind">ir + <i>infinitive</i></span>
+
+  <ul class="ind">
+    <ul class="horiz">
+      <li>vou</li>
+      <li>vais</li>
+      <li>vai</li>
+      <li>vamos</li>
+      <li>v&atilde;o</li>
+    </ul>
+  </ul>
+
+  <br />
+
+</div>
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<a name="imp"></a>
+<div>
+
+  <h2>imperfect</h2>
+
+  <span class="tp">normally:</span>
+
+  <ul class="ind">
+    <ul class="horiz">
+      <li>fal<b>ava</b></li>
+      <li>fal<b>avas</b></li>
+      <li>fal<b>ava</b></li>
+      <li>fal<b>&aacute;mos</b></li>
+      <li>fal<b>avam</b></li>
+    </ul>
+    <ul class="horiz">
+      <li>beb<b>ia</b></li>
+      <li>beb<b>ias</b></li>
+      <li>beb<b>ia</b></li>
+      <li>beb<b>&iacute;mos</b></li>
+      <li>beb<b>iam</b></li>
+    </ul>
+    <ul class="horiz">
+      <li>abr<b>ia</b></li>
+      <li>abr<b>ias</b></li>
+      <li>abr<b>ia</b></li>
+      <li>abr<b>&iacute;amos</b></li>
+      <li>abr<b>iam</b></li>
+    </ul>
+  </ul>
+  
+  <br />
+  
+  <div id="imp"><span class="tt">irregular</span> <a href="javascript:loadSection('imp')">(show &gt;&gt;)</a><br /></div>
+
+  <br />
+
+</div>
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+<a name="cond"></a>
+<div>
+
+  <h2>conditional</h2>
+
+  <span class="tp">normally:</span>
+
+  <ul class="ind">
+    <ul class="horiz">
+      <li>falar<b>ia</b></li>
+      <li>falar<b>ias</b></li>
+      <li>falar<b>ia</b></li>
+      <li>falar<b>&iacute;amos</b></li>
+      <li>falar<b>iam</b></li>
+    </ul>
+  </ul>
+
+  <br />
+
+  <div id="cond"><span class="tt">irregular</span> <a href="javascript:loadSection('cond')">(show &gt;&gt;)</a><br /></div>
+
+  <br />
+
+</div>
+
+<div id="footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,53 @@
+
+/*  body { padding-bottom: 400px; } */
+
+div { border-bottom: 1px solid #333; padding: 10px 5px; }
+#floater { position: absolute; top: 100px; left: 400px; width: 200px; height: 200px; background: red; }
+
+ul { 
+	list-style: none;
+	padding: 0; 
+	margin: 0 0 10px 0;
+	}
+
+ul li a {
+	color: #444;
+	font: 16px Verdana, Arial, Helvetica, sans-serif;
+	text-decoration: none;
+	background: transparent;
+	padding: 0;
+	margin: 0 0 0 20px;
+	display: block;
+	width: 100px;
+	}
+ul li a:hover, ul li a:active { color: #BBB; }
+
+h1 { font: 24px Verdana, Arial, Helvetica, sans-serif; font-weight: bold; padding-left: 10px; color: #555; }
+h2 { font: 16px Verdana, Arial, Helvetica, sans-serif; font-weight: bold; }
+h1 a { text-decoration: none; color: #45B; }
+h1 a:hover, h1 a:active {color: #239; }
+
+.horiz {
+	white-space: nowrap;
+	clear: both;
+	}
+.horiz li { 
+	list-style: none;
+	width: 100px; 
+	float: left;
+	display: inline;
+	}
+
+.verbos { padding: 0; margin: 0 0 0 20px; display: block; }
+ul li { width: 240px; }
+ul li span { float: left; font-style: italic; width: 100px; }
+.irreg { font-style: italic; color: #955;  }
+
+
+#future, #present, #past, #imp, #cond { border-bottom: none; margin-left: 48px; padding: 0; }
+#future a, #present a, #past a, #imp a, #cond a { text-decoration: none; color: #45B; font: 16px Times, serif; font-style: italic; }
+#future ul, #present ul, #past ul, #imp ul, #cond ul { margin-left: 12px; font-style: normal; }
+.tt { font: 16px Times, serif; font-style: italic; color: #764; }
+
+.tp { font: 16px Times, serif; font-style: italic; color: #764; padding-left: 48px; }
+.ind { padding: 0; margin: 0 0 12px 170px; font: 11px Trebechet MS, Helvetica, sans-serif; /* border: thin grey solid; */ }
