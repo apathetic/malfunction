@@ -1,3 +1,5 @@
+'use strict';
+
 // GLOBAL:
 var CTD = window.CTD || {};
 
@@ -69,8 +71,8 @@ function basicTexture(n, p){
 	}
 
 
-	if(p) grd=ctx.createLinearGradient(0,0,64,0);
-	else grd=ctx.createLinearGradient(0,0,0,64);
+	if (p) { grd = ctx.createLinearGradient(0,0,64,0); }
+	else { grd = ctx.createLinearGradient(0,0,0,64); }
 	grd.addColorStop(0,colors[1]);
 	grd.addColorStop(1,colors[0]);
 
@@ -122,7 +124,7 @@ CTD.scene = (function(){
 		back.geometry.applyMatrix(new THREE.Matrix4().makeRotationZ(15*ToRad));
 		scene.add( back );
 
-		renderer = new THREE.WebGLRenderer({precision: "mediump", antialias:false });
+		renderer = new THREE.WebGLRenderer({precision: "mediump", antialias:true });
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		renderer.autoClear = false;
 		renderer.shadowMapEnabled = true;
@@ -145,7 +147,7 @@ CTD.scene = (function(){
 	}
 
 	function moveCamera() {
-		camera.position.copy(Orbit(center, camPos.h, camPos.v, camPos.distance));
+		camera.position.copy( Orbit(center, camPos.h, camPos.v, camPos.distance) );
 		camera.lookAt(center);
 	}
 
@@ -170,7 +172,7 @@ CTD.scene = (function(){
 	return {
 		init: init,
 		moveCamera: moveCamera
-	}
+	};
 
 })();
 
@@ -181,29 +183,29 @@ CTD.scene = (function(){
 CTD.ui = (function(){
 
 	var mouse = { ox:0, oy:0, h:0, v:0, mx:0, my:0, down:false, over:false, moving:true, button:0 };
-	var viewport = {w:window.innerWidth, h:window.innerHeight}
+	var viewport = { w:window.innerWidth, h:window.innerHeight };
 	var intersects;
 	var raycaster, projector;
+	var px, py;
 	var offset = new THREE.Vector3(),
-		controls = {},
-		INTERSECTED, SELECTED;
+		// controls = {},
+		INTERSECTION, SELECTED;
 
 
 	function init(){
 		raycaster = new THREE.Raycaster();
 		projector = new THREE.Projector();
 
-
 	    container.addEventListener( 'mousemove', onMouseMove, false );
 	    container.addEventListener( 'mousedown', onMouseDown, false );
 	    container.addEventListener( 'mouseout',  onMouseUp, false );
-	    container.addEventListener( 'mouseup', onMouseUp, false );
+	    container.addEventListener( 'mouseup',   onMouseUp, false );
 
 	    container.addEventListener( 'touchstart', onMouseDown, false );
-	    container.addEventListener( 'touchend', onMouseUp, false );
-	    container.addEventListener( 'touchmove', onMouseMove, false );
+	    container.addEventListener( 'touchend',   onMouseUp, false );
+	    container.addEventListener( 'touchmove',  onMouseMove, false );
 
-	    container.addEventListener( 'mousewheel', onMouseWheel, false );
+	    container.addEventListener( 'mousewheel',     onMouseWheel, false );
 	    container.addEventListener( 'DOMMouseScroll', onMouseWheel, false );
 
 	    window.addEventListener( 'resize', onWindowResize, false );
@@ -211,8 +213,6 @@ CTD.ui = (function(){
 
 	function mouseRay(e) {
 		e.preventDefault();
-
-		var px, py;
 
 		if (e.touches){
 			px = e.clientX || e.touches[ 0 ].pageX;
@@ -230,95 +230,84 @@ CTD.ui = (function(){
 
 		projector.unprojectVector( vector, camera );
 		raycaster.set( camera.position, vector.sub( camera.position ).normalize() );
-		// intersects = raycaster.intersectObjects( scene.children );
-		intersects = raycaster.intersectObjects( CTD.ragdoll.meshs );
-
-		return {
-			px:px,
-			py:py
-		}
+		intersects = raycaster.intersectObjects( CTD.ragdoll.meshs() );
 	}
 
-	var onMouseMove = function(e){
+	function onMouseMove(e){
 
 		mouseRay(e);
 
-		if ( SELECTED ) {
-			intersects = raycaster.intersectObject( back );
-			SELECTED.position.copy( intersects[ 0 ].point.sub( offset ) );
+		container.style.cursor = intersects.length ? 'pointer' : mouse.down ? 'move' : 'auto';
+
+		if (SELECTED) {
+			INTERSECTION = raycaster.intersectObject( back );
+			SELECTED.position.copy( INTERSECTION[ 0 ].point.sub( offset ) );
+
+
+
+			// mesh.position.copy(body.getPosition());
+			// mesh.quaternion.copy(body.getQuaternion());
+
+
+
+
 			return;
 		}
 
-
-		if ( intersects.length ) {
-			if ( INTERSECTED != intersects[ 0 ].object ) {
-				INTERSECTED = intersects[ 0 ].object;
-
-				back.position.copy( INTERSECTED.position );
-				back.lookAt( camera.position );
-			}
-
-			container.style.cursor = 'pointer';
-
-		} else {
-			INTERSECTED = null;
-			container.style.cursor = 'auto';
+		if (mouse.down) {
+			camPos.h = ((px - mouse.ox) * 0.3) + mouse.h;
+			camPos.v = (-(py - mouse.oy) * 0.3) + mouse.v;
+			CTD.scene.moveCamera();
+			return;
 		}
 	}
 
-	var onMouseDown = function(e){
+	function onMouseDown(e){
 
-		var capture = mouseRay(e);
+		mouseRay(e);
 
-		mouse.ox = capture.px;
-		mouse.oy = capture.py;
+		mouse.ox = px;
+		mouse.oy = py;
 		mouse.h = camPos.h;
 		mouse.v = camPos.v;
 		mouse.down = true;
 
-
-
-		if ( intersects.length ) {
-			controls.enabled = false;
-			SELECTED = intersects[ 0 ].object;
-
-			intersects = raycaster.intersectObject( back );
-			offset.copy( intersects[ 0 ].point ).sub( back.position );
+		if ( intersects.length ) {											// if we clicked on "something"
+			SELECTED = intersects[ 0 ].object;								// copy what we clicked on (ie. the closed to the camera or index 0) into SELECTED
+			INTERSECTION = raycaster.intersectObject( back );				// find out where the .... mouseRay... intersects? .... with the background plane ...?
+			offset.copy( INTERSECTION[ 0 ].point ).sub( back.position );
 
 			// var point = intersects[0].point;
 			// var p1 = [SELECTED.position.x - point.x, SELECTED.position.y - point.y, SELECTED.position.z-point.z];
-			container.style.cursor = 'move';
-		} else {
-			document.body.style.cursor = 'move';
-			camPos.h = ((capture.px - mouse.ox) * 0.3) + mouse.h;
-			camPos.v = (-(capture.py - mouse.oy) * 0.3) + mouse.v;
-			CTD.scene.moveCamera();
 		}
 	}
 
-	var onMouseUp = function(e){
+	function onMouseUp(e){
 	    mouse.down = false;
 
-		controls.enabled = true;
+		// controls.enabled = true;
 
-		if ( INTERSECTED ) {
-			back.position.copy( INTERSECTED.position );		// "back" is: new THREE.Mesh.....
+		if ( SELECTED ) {
+			console.log('NO NO NO NO');
+			back.position.copy( SELECTED.position );		// "back" is: new THREE.Mesh.....
 			SELECTED = null;
 		}
 
 	    document.body.style.cursor = 'auto';
 	}
 
-	var onMouseWheel = function (e) {
+	function onMouseWheel(e) {
 	    var delta = 0;
-	    if(e.wheelDeltaY){delta=e.wheelDeltaY*0.01;}
-	    else if(e.wheelDelta){delta=e.wheelDelta*0.05;}
-	    else if(e.detail){delta=-e.detail*1.0;}
-	    camPos.distance-=(delta*10);
+
+	    if (e.wheelDeltaY) { delta = e.wheelDeltaY * 0.01; }
+	    else if (e.wheelDelta) {delta = e.wheelDelta * 0.05; }
+	    else if (e.detail) { delta =- e.detail * 1.0; }
+
+	    camPos.distance -= (delta * 10);
 	    CTD.scene.moveCamera();
 	}
 
-	var onWindowResize = function () {
+	function onWindowResize() {
 	    viewport.w = window.innerWidth;
 	    viewport.h = window.innerHeight;
 	    camera.aspect = viewport.w / viewport.h;
@@ -330,7 +319,7 @@ CTD.ui = (function(){
 
 	return {
 		init: init
-	}
+	};
 
 })();
 
@@ -348,7 +337,7 @@ CTD.ragdoll = (function(){
 	var meshs = [];
 	var grounds = [];
 	var geoBox, geoSphere, geoSphere2, geoCylinder, geoCylinder2;
-	var matBox, matSphere, matBoxSleep, matSphereSleep, matGround,  matBoxSleep2, matBox2, matHead;
+	var matBox, matBox2, matBox3, matSphere, matBoxSleep, matSphereSleep, matGround,  matBoxSleep2, matHead;
 
 	function init() {
 
@@ -481,6 +470,8 @@ CTD.ragdoll = (function(){
 		var mesh;
 		var body;
 
+		// ***** HERE we need a way to take into account mouse dragging, etc. updated positions of body parts ****
+
 		while (i--){
 			body = bodys[i].body;
 			mesh = meshs[i];
@@ -489,8 +480,9 @@ CTD.ragdoll = (function(){
 			mesh.quaternion.copy(body.getQuaternion());
 
 			// reset position
-			if (mesh.position.y < -200 && bodys[i].name.substring(0,6)==='pelvis'){
-
+			/* * /
+			if (mesh.position.y < -200 && bodys[i].name.substring(0,6)==='pelvis'){		// if object has fallen off the bottom of the scene ( < -200 )
+																						// we also start from "pelvis", as all body parts are relative to that in the array
 				x = -100 + Math.random()*200;
 				z = -100 + Math.random()*200;
 				y = 500 + Math.random()*200;
@@ -527,6 +519,7 @@ CTD.ragdoll = (function(){
 				bodys[i+11].body.resetRotation(0,0,20);
 				bodys[i+12].body.resetRotation(0,0,20);
 			}
+			/* */
 		}
 	}
 
@@ -559,27 +552,44 @@ CTD.ragdoll = (function(){
 		else if(type==='cylinder2'){mesh = new THREE.Mesh( geoCylinder2, mat );}
 		else { mesh = new THREE.Mesh( geoBox, mat ); }
 		mesh.scale.set( size[0], size[1], size[2] );
-		if(position)mesh.position.set( position[0], position[1], position[2] );
-		if(rotation)mesh.rotation.set( rotation[0]*ToRad, rotation[1]*ToRad, rotation[2]*ToRad );
+
+		if (position) { mesh.position.set( position[0], position[1], position[2] ); }
+		if (rotation) { mesh.rotation.set( rotation[0]*ToRad, rotation[1]*ToRad, rotation[2]*ToRad ); }
 		scene.add( mesh );
 		mesh.castShadow = true;
 		mesh.receiveShadow = true;
 		return mesh;
 	}
 
+	function updateHeadMaterial(which, material ) {
+		// matHead = new THREE.MeshLambertMaterial( { color: 0xe8b36d, name:'sphHH', shininess:60, specular:0xffffff  } );
+
+
+		// texture = THREE.ImageUtils.loadTexture('crate.gif', {}, function() {
+		// 	renderer.render(scene);
+		// }),
+
+		var head = ((which-1) * 13) + 4;		// we can do 1 2 or 3
+
+		meshs[head].material.map = THREE.ImageUtils.loadTexture(material);
+		meshs[head].material.needsUpdate = true;
+	}
+
 	function clearMesh(){
 		var i=meshs.length;
-		while (i--) scene.remove(meshs[ i ]);
+		while (i--) { scene.remove(meshs[ i ]); }
 		i = grounds.length;
-		while (i--) scene.remove(grounds[ i ]);
+		while (i--) { scene.remove(grounds[ i ]); }
 		grounds = [];
 		meshs = [];
 	}
 
 	return {
 		init: init,
-		meshs: meshs 		// for raycasting
-	}
+		// meshs: meshs,				// for raycasting checks
+		meshs: function() { return meshs; },				// for raycasting checks
+		updateHead: updateHeadMaterial
+	};
 
 })();
 
@@ -614,7 +624,7 @@ CTD.physics = (function(){
 		init: init,
 		calculate: calculate,	// Array.prototype.push.call(
 		gravity: gravity
-	}
+	};
 
 })();
 

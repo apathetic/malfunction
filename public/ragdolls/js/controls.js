@@ -1,6 +1,4 @@
-var CTD = window.CTD || {};
-
-CTD.controls = (function() {
+(function() {
 
 	var button = document.getElementById('toggle');
 	var controls = document.getElementById('controls');

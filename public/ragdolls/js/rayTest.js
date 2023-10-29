@@ -1,3 +1,4 @@
+/* jshint ignore:start */
 
 var rayTest = function () {
 	// if ( content.children.length ) {

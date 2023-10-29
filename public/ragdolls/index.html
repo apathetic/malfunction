@@ -11,9 +11,10 @@
 		body, html { height:100%; overflow: hidden; }
 		header { position:absolute; top:0; left:0; height:200px; width:100%; background:rgba(0,0,0, 0.9); transition: all 0.3s; transform: translateY(-200px); }
 		header.active { transform: translateY(0); }
-		header button { cursor:pointer }
+		header button { cursor:pointer; font-size:2em; }
 		#drop-zone { height:100%; width: 100%; }
 		#face { height:90%; float:left; }
+		#gravity { position: fixed; bottom: 0; right:0; width: 50px; height: 30px; z-index: 10; }
 	</style>
 </head>
 <body>
@@ -43,7 +44,7 @@
     <!-- <input type="number" name="quantity" min="10" max="2000" value="32"  id='MaxNumber'> -->
     <!-- <input type="submit" onClick=populate()> -->
     <!-- <input type="button" value="collision off" onClick=switchCollision() id="col"> -->
-    <!-- <input type="number" name="gravity" min="-20" max="20" value="-1" id='gravity' onChange=gravity() > -->
+	<input type="number" name="gravity" min="-20" max="20" value="-1" id='gravity' onChange=updateGravity() >
 <!-- </div> -->
 
 <!-- <div id='info'></div> -->
@@ -58,9 +59,14 @@
 	<script>CTD.scene.init()</script>
 	<script>CTD.physics.init()</script>
 	<script>CTD.ragdoll.init()</script>
-	<script>CTD.image.init()</script>
+	<script>CTD.imageManager.init()</script>
 
 	<script>
+		function updateGravity() {
+			var nG = document.getElementById('gravity').value;
+			CTD.physics.gravity(nG);
+		}
+
 		// REVERSE GRAVITY after 25 seconds. JUST BECAUSE.
 		setTimeout(function(){
 			CTD.physics.gravity(0.001);
