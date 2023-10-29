@@ -3,7 +3,7 @@
 // malfunction
 // --------------------------
 
-var MALFUNCTION = (function(){
+var malfunc = (function(){
 
 	var stats;
 	var camera, scene, renderer;
@@ -127,11 +127,11 @@ var MALFUNCTION = (function(){
 	};
 
 
-	function onResize(event) {
+	function onResizes(event) {
 		console.log('resizeeeing', renderer);
 		console.log('resizeeeing', window.innerWidth, window.innerHeight);
 		// grid();
-		// renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setSize( window.innerWidth, window.innerHeight );
 	};
 
 
@@ -168,8 +168,6 @@ var MALFUNCTION = (function(){
 		camera.position.x = -500;
 
 
-
-
 		// the scene contains all the 3D object data
 		scene = new THREE.Scene();
 		scene.add(camera);
@@ -188,47 +186,43 @@ var MALFUNCTION = (function(){
 
 		// add the mouse move listener
 		document.addEventListener( 'mousemove', onMouseMove, false );
-		document.addEventListener( 'resize', onResize, false );
+		window.addEventListener( 'resize', onResizes );
 
-/*
-		stats = new Stats();
-		stats.domElement.style.position = 'absolute';
-		stats.domElement.style.top = '0px';
-		document.body.appendChild( stats.domElement );
-*/
+		animate();
 
 	}
 
 
 	return {
-		tion: function(options) {
-			if (! (this instanceof arguments.callee)) {
-				return new arguments.callee(arguments);
-			}
+		tion: init
+			// function(options) {
+			// if (! (this instanceof arguments.callee)) {
+			// 	return new arguments.callee(arguments);
+			// }
 
-			if ( !window.requestAnimationFrame ) {
-				window.requestAnimationFrame = ( function() {
-					return window.webkitRequestAnimationFrame ||
-					window.mozRequestAnimationFrame ||
-					window.oRequestAnimationFrame ||
-					window.msRequestAnimationFrame ||
-					function( callback, element ) {
-						window.setTimeout( callback, 1000 / 60 );
-					};
-				} )();
-			}
+			// if ( !window.requestAnimationFrame ) {
+			// 	window.requestAnimationFrame = ( function() {
+			// 		return window.webkitRequestAnimationFrame ||
+			// 		window.mozRequestAnimationFrame ||
+			// 		window.oRequestAnimationFrame ||
+			// 		window.msRequestAnimationFrame ||
+			// 		function( callback, element ) {
+			// 			window.setTimeout( callback, 1000 / 60 );
+			// 		};
+			// 	} )();
+			// }
 
- 			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+ 			// if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
 
-			init();
-			animate();
+			// init();
+			// animate();
 
-		}
+			// }
 	}
 
 });
 
-var malfunc = new MALFUNCTION();
+// var malfunc = new MALFUNCTION();
 window.onload = malfunc.tion;
 
 

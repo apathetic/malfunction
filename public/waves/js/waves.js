@@ -72,14 +72,21 @@ var WAVES = (function(){
 			// and move it forward dependent on the mouseY position.
 			bird.position.z += 1; //mouseY * 0.1;
 			bird.volume.gain.value += 0.0005;		//		1 / 2000th
+
 			bird.phase = ( bird.phase + ( Math.max( 0, bird.rotation.z ) + 0.1 )  ) % 62.83;
 			bird.geometry.vertices[ 5 ].y = bird.geometry.vertices[ 4 ].y = Math.sin( bird.phase ) * 5;
+
+
+			var t = ((mouseY/window.innerHeight) - 0.5) * 4;
+			bird.sound.frequency.value += t;
+
 
 			// if the bird is too close move it to the back
 			if (bird.position.z > 1000) {
 				bird.position.z -= 2000;
-				bird.volume.gain.value = 0;
 
+				console.log(bird.volume.gain.value);
+				bird.volume.gain.value = 0;
 
 				// if (~~(Math.random(1)*2)) {
 				// 	if (mal) {
@@ -113,7 +120,7 @@ var WAVES = (function(){
 		var bird;
 		// var drone;
 		var gain;
-		var now = context.currentTime;
+		// var now = context.currentTime;
 
 		for ( var i = 0; i < numberOfBirds; i++ ) {
 
@@ -140,9 +147,8 @@ var WAVES = (function(){
 			// bird.sound.loop = true;
 
 			bird.sound = context.createOscillator();
-			bird.sound.frequency.value = bird.position.y;
+			bird.sound.frequency.value = Math.abs(bird.position.y);
 			// bird.sound.start();
-
 
 
 			bird.volume = context.createGain();
@@ -282,8 +288,6 @@ var WAVES = (function(){
 	function initVideo() {
 
 		// params: field of view, aspect ratio for render output, near and far clipping plane.
-		// camera = new THREE.OrthographicCamera(80, window.innerWidth/window.innerHeight, 1, 4000);
- 		// camera = new THREE.Camera(80, window.innerWidth/window.innerHeight, 1, 4000);
 		camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 1, 4000);
 
 		// move the camera backwards so we can see stuff! (default position is 0,0,0 )
@@ -298,7 +302,7 @@ var WAVES = (function(){
 		// figure out what the stuff in the scene looks like, draws it
 		// renderer = new THREE.WebGLRenderer();
 		renderer = new THREE.CanvasRenderer();
-		renderer.setSize( window.innerWidth, window.innerHeight );
+		renderer.setSize( window.innerWidth, window.innerHeight);
 
 		// the renderer's canvas domElement is added to the body
 		document.body.appendChild( renderer.domElement );
@@ -310,12 +314,6 @@ var WAVES = (function(){
 
 		animate();
 
-		/*
-		stats = new Stats();
-		stats.domElement.style.position = 'absolute';
-		stats.domElement.style.top = '0px';
-		document.body.appendChild( stats.domElement );
-		*/
 	}
 
 	function initAudio() {
@@ -349,7 +347,7 @@ var WAVES = (function(){
 
 			// add event listeners
 			document.addEventListener( 'mousemove', onMouseMove, false );
-			document.addEventListener( 'resize', onWindowResize, false );
+			window.addEventListener( 'resize', onWindowResize, false );
 
 			initAudio();
 			initVideo();
@@ -357,10 +355,10 @@ var WAVES = (function(){
 		}
 	}
 
-});
+})();
 
-var waves = new WAVES();
-window.onload = waves.wavywavewave;
+// var waves = new WAVES();
+window.onload = WAVES.wavywavewave;
 
 
 
