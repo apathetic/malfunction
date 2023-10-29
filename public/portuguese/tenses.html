@@ -1,70 +1,31 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 
 <html>
 <head>
   <title>Portuguese Common Tenses</title>
   <link rel="stylesheet" href="porto.css" type="text/css" media="screen" />
-  <script type="text/javascript" src="ajax.js"></script>
+  <script type="text/javascript" src="irregular.js"></script>
   <script type="text/javascript">
-
-var http = createRequestObject();
-
-function createRequestObject() {
-    var ro;
-    var browser = navigator.appName;
-    if (browser == "Microsoft Internet Explorer") {
-        ro = new ActiveXObject("Microsoft.XMLHTTP");
+    function loadSection(action) {
+      var stuffs = irregular[action];
+      document.getElementById(action).innerHTML = stuffs;
     }
-    else {
-        ro = new XMLHttpRequest();
+
+    function hideSection(arg) {
+      document.getElementById(arg).innerHTML = '<span class="tt">irregular<\/span> <a href="javascript:loadSection(\''+arg+'\')">(show &gt;&gt;)</a>';
     }
-    return ro;
-}
-
-function handleResponse() {
-    if (http.readyState == 4) {
-		var response = http.responseText;
-		var update = new Array();
-		if (response.indexOf('|' != -1)) {
-			update = response.split('|');
-            document.getElementById(update[0]).innerHTML = update[1];
-		}
-    }
-}
-
-function loadSection(action) {
-	http.open('get', 'irreg.php?action='+action);
-	http.onreadystatechange = handleResponse;
-	http.send(null);
-}
-
-function hideSection(arg) {
-	document.getElementById(arg).innerHTML = '<span class="tt">irregular<\/span> <a href="javascript:loadSection(\''+arg+'\')">(show &gt;&gt;)</a>';
-}
-
   </script>
 </head>
 
 <body>
 
 
-<h1>Tenses :: <a href="verbos.html">Verbs</a></h1>
-
-<ul>
-  <li><a href="#present">present</a>
-  <li><a href="#past">past</a>
-  <li><a href="#future">future</a>
-  <li><a href="#imp">imperfect</a>
-  <li><a href="#cond">conditional</a>
-</ul>
-
-<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<h1>Tenses :: <a href="verbos.html">Verbs</a> :: <a href="vocab.html">Vocab</a></h1>
 
 <div><a name="present"></a>
 
-  <h2>present</h2> 
-  
+  <h2>present</h2>
+
   <span class="tp">simple</span>
 
   <ul class="ind">
@@ -90,7 +51,7 @@ function hideSection(arg) {
       <li>abr<b>em</b></li>
     </ul>
   </ul>
-  
+
   <br />
 
   <div id="present"><span class="tt">irregular</span> <a href="javascript:loadSection('present')">(show &gt;&gt;)</a></div>
@@ -182,7 +143,7 @@ function hideSection(arg) {
   <br /><br />
 
   <div id="future"><span class="tt">irregular</span> <a href="javascript:loadSection('future')">(show &gt;&gt;)</a></div>
-  
+
   <br />
 
   <span class="tp">near</span><br />
@@ -235,9 +196,9 @@ function hideSection(arg) {
       <li>abr<b>iam</b></li>
     </ul>
   </ul>
-  
+
   <br />
-  
+
   <div id="imp"><span class="tt">irregular</span> <a href="javascript:loadSection('imp')">(show &gt;&gt;)</a><br /></div>
 
   <br />
