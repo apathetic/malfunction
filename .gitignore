@@ -1,5 +1,5 @@
 .DS_Store
+ASS/
 node_modules/
 .wrangler/
 .vscode/
-ASS/
