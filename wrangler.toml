@@ -2,10 +2,6 @@ name = "malfunction"
 main = "index.js"
 compatibility_date = "2023-11-11"
 
-[[kv_namespaces]]
-binding = "files"
-id = "e9644c42f17342f1aec1b49af0245e34"
-
 [site]
 bucket = "./public"
 

@@ -7,6 +7,6 @@
     "wrangler": "2.15.0"
   },
   "scripts": {
-    "start": "wrangler dev"
+    "dev": "wrangler pages dev public"
   }
 }
