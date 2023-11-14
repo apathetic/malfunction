@@ -1,26 +1,29 @@
 import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler';
 
 
-import manifestJSON from '__STATIC_CONTENT_MANIFEST';
-const assetManifest = JSON.parse(manifestJSON || '{}');
-// const apps = Object.keys(assetManifest).filter((ass) => ass.match(/index.html/));
-
-const apps = ['ascii', 'birds', 'lavaflow', 'portuguese', 'ragdolls', 'rain', 'ryoiji', 'starmap', 'synth', 'waves'];
+// const apps = ['ascii', 'birds', 'lavaflow', 'portuguese', 'ragdolls', 'rain', 'ryoiji', 'starmap', 'synth', 'waves'];
 
 
 export async function onRequest(context) {
     const { request, env, waitUntil } = context;
     const time = new Date().toISOString();
 
+    // ----- UNDEFINED IN PROD. WORKS LOCALLY: ------------
     // const assetManifest = JSON.parse(env.__STATIC_CONTENT_MANIFEST);
-    // const apps = Object.keys(assetManifest).filter((ass) => ass.match(/index.html/));
-    // const task = await context.env.FILES.get('ascii/ascii.4dabe0506f.html');
-    // console.log(context.env);
-  //   const task = await context.env.ASSETS.get('ascii/index.html');
-  //   console.log(task);
+    // ----------------------------------------------------
+
+    const task = await context.env.FILES.get('ascii/index.html');
+    // console.log(context.env.FILES);
+    // console.log(context.env.ASSETS);
+    console.log(JSON.stringify(context.env.FILES));
+    console.log(task);
+    const apps = Object.keys(context.env.FILES).filter((ass) => ass.match(/index.html/));
   // return new Response(task);
 
-
+    if (!task || !apps) {
+      console.log('deerr');
+      throw new Error(JSON.stringify(context));
+    }
 
     const app = apps[~~(Math.random() * apps.length)];
     console.log(`[${time}] CONGRATS YOU'RE GETTING: ${app}`);
