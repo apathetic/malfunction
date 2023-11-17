@@ -1,35 +1,67 @@
 import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler';
 
 
-// const apps = ['ascii', 'birds', 'lavaflow', 'portuguese', 'ragdolls', 'rain', 'ryoiji', 'starmap', 'synth', 'waves'];
+// const apps = Object.keys(env.FILES).filter((ass) => ass.match(/index.html/));
+const apps = ['/ascii/', '/birds/', '/lavaflow/', '/portuguese/', '/ragdolls/', '/rain/', '/ryoiji/', '/starmap/', '/synth/', '/waves/'];
+const appsX = [
+  'ascii/index.6ff764cdcd.html',
+  'birds/index.2badbe018e.html',
+  'lavaflow/index.515a6a7156.html',
+  'portuguese/index.2a99dc4c89.html',
+  'ragdolls/index.9fe2cdd2e6.html',
+  'rain/index.59962b8da1.html',
+  'ryoji/index.f455f398e1.html',
+  'starmap/index.8d5cf2e33d.html',
+  'synth/index.a08b7434d5.html',
+  'waves/index.7f912c1b00.html'
+];
 
+//////////////////// ❯ wrangler kv:key get ascii/index.6ff764cdcd.html  --namespace-id e9644c42f17342f1aec1b49af0245e34 --preview
 
-export async function onRequest(context) {
-    const { request, env, waitUntil } = context;
+export async function onRequest({ request, env, params, waitUntil }) {
     const time = new Date().toISOString();
+    const url = new URL(request.url);
+    const app = apps[~~(Math.random() * apps.length)];
+    console.log(`[${time}] CONGRATS YOU'RE GETTING: ${app}`);
 
     // ----- UNDEFINED IN PROD. WORKS LOCALLY: ------------
     // const assetManifest = JSON.parse(env.__STATIC_CONTENT_MANIFEST);
     // ----------------------------------------------------
 
-    const task = await context.env.FILES.get('ascii/index.html');
-    // console.log(context.env.FILES);
-    // console.log(context.env.ASSETS);
-    console.log(JSON.stringify(context.env.FILES));
-    console.log(task);
-    const apps = Object.keys(context.env.FILES).filter((ass) => ass.match(/index.html/));
-  // return new Response(task);
 
-    if (!task || !apps) {
-      console.log('deerr');
-      throw new Error(JSON.stringify(context));
-    }
+    // https://developers.cloudflare.com/pages/platform/functions/api-reference/#envassetsfetch
+    // The env.ASSETS.fetch() function allows you to fetch a static asset from
+    // your Pages project. Requests passed to the env.ASSETS.fetch() function
+    // must be to the pretty path, not directly to the asset. For example, if
+    // you had the path /users/index.html, you will request /users/ instead of
+    // /users/index.html. This method call will run the header and redirect
+    // rules, modifying the response that is returned.
 
-    const app = apps[~~(Math.random() * apps.length)];
-    console.log(`[${time}] CONGRATS YOU'RE GETTING: ${app}`);
+    // let sss = await env.FILES.fetch(app);
 
-    const url = new URL(request.url);
-    url.pathname = app + '/index.html';
+    let dss = await env.FILES.get('ascii/index.html');
+
+
+    url.pathname = app;
+    const newRequest = new Request(url, request)
+
+    console.log(dss, newRequest)
+    return env.ASSETS.fetch(newRequest);
+
+
+    // guessing env.FILES is a Map. If so...
+
+    // NO
+    // IT Is
+    // NOT
+    // a
+    // MAP
+    //
+
+
+    // const app = env.FILES.get([...env.FILES.keys()][~~(Math.random() * env.FILES.size)])
+    // let keys = Array.from(env.FILES.keys());
+
 
     const options = {
       ASSET_NAMESPACE: env.__STATIC_CONTENT,
