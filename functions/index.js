@@ -37,16 +37,33 @@ export async function onRequest({ request, env, params, waitUntil }) {
     // /users/index.html. This method call will run the header and redirect
     // rules, modifying the response that is returned.
 
-    // let sss = await env.FILES.fetch(app);
+    // ** BAD: ummmm does not work. This example is right from the docs (ie above)
+    // ✘✘✘ TypeError: Fetch API cannot load: /ragdolls/
+    // return env.ASSETS.fetch(app);
 
-    let dss = await env.FILES.get('ascii/index.html');
+    // ** TBD: this example comes from the Workers-migragion page
+    return env.ASSETS.fetch(request);
+
+    // ** BAD: env.FILES does not have `fetch` **
+    // const xxx = await env.FILES.fetch(app);
+
+    // ** WORKS: but, shouldn't need to do this? Just use index.html **
+    // const xxx = await env.FILES.get('ascii/index.6ff764cdcd.html');
 
 
-    url.pathname = app;
+
+    url.pathname = app; // app + 'index.html'
     const newRequest = new Request(url, request)
 
-    console.log(dss, newRequest)
-    return env.ASSETS.fetch(newRequest);
+    const x = await env.ASSETS.fetch(newRequest);
+
+
+
+    // return env.ASSETS.fetch(newRequest);
+
+
+    return await getAssetFromKV({ request: newRequest, waitUntil });
+
 
 
     // guessing env.FILES is a Map. If so...
