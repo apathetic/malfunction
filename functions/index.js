@@ -2,7 +2,7 @@ import { getAssetFromKV, mapRequestToAsset } from '@cloudflare/kv-asset-handler'
 
 
 // const apps = Object.keys(env.FILES).filter((ass) => ass.match(/index.html/));
-const apps = ['/ascii/', '/birds/', '/lavaflow/', '/portuguese/', '/ragdolls/', '/rain/', '/ryoiji/', '/starmap/', '/synth/', '/waves/'];
+const apps = ['ascii/', 'birds/', 'lavaflow/', 'portuguese/', 'ragdolls/', 'rain/', 'ryoiji/', 'starmap/', 'synth/', 'waves/'];
 const appsX = [
   'ascii/index.6ff764cdcd.html',
   'birds/index.2badbe018e.html',
@@ -38,28 +38,41 @@ export async function onRequest({ request, env, params, waitUntil }) {
     // rules, modifying the response that is returned.
 
     // ** BAD: ummmm does not work. This example is right from the docs (ie above)
-    // ✘✘✘ TypeError: Fetch API cannot load: /ragdolls/
+    //    err: ✘ TypeError: Fetch API cannot load: /ragdolls/
     // return env.ASSETS.fetch(app);
+    // return env.ASSETS.fetch('/public/' + app);
 
-    // ** TBD: this example comes from the Workers-migragion page
-    return env.ASSETS.fetch(request);
+    // ** BAD: this example comes from the Workers-migragion page
+    //    ...: unclear why it fails; no error message
+    // return env.ASSETS.fetch(request);
 
-    // ** BAD: env.FILES does not have `fetch` **
+    // ** BAD: `Error: KVError: there is no KV namespace bound to the script`
+    // return await getAssetFromKV({ request, waitUntil });
+
+    // ** BAD: also doesn't work
+    //    err: env.FILES does not have `fetch`
     // const xxx = await env.FILES.fetch(app);
 
-    // ** WORKS: but, shouldn't need to do this? Just use index.html **
+    // ** WORKS: but, shouldn't need to do this? Just use index.html
     // const xxx = await env.FILES.get('ascii/index.6ff764cdcd.html');
 
 
+///// visiting
+///   https://malfunction.pages.dev/public/ascii/
+  /// works!
 
-    url.pathname = app; // app + 'index.html'
+    // url.pathname = app; // app + 'index.html' // app // 'public' + app // 'public/' + app + 'index.html'
+    url.pathname = '/public/' + app;
     const newRequest = new Request(url, request)
 
-    const x = await env.ASSETS.fetch(newRequest);
+    console.log(request.url, newRequest.url, JSON.stringify(request.url), JSON.stringify(newRequest.url));
+
+
+    // const x = await env.ASSETS.fetch(newRequest);
+    return env.ASSETS.fetch(newRequest);
 
 
 
-    // return env.ASSETS.fetch(newRequest);
 
 
     return await getAssetFromKV({ request: newRequest, waitUntil });

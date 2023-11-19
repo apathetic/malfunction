@@ -3,3 +3,4 @@ ASS/
 node_modules/
 .wrangler/
 .vscode/
+app.js
