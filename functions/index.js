@@ -65,7 +65,7 @@ export async function onRequest({ request, env, params, waitUntil }) {
     url.pathname = '/public/' + app;
     const newRequest = new Request(url, request)
 
-    console.log(request.url, newRequest.url, JSON.stringify(request.url), JSON.stringify(newRequest.url));
+    console.log(request.url, newRequest.url);
 
 
     // const x = await env.ASSETS.fetch(newRequest);
