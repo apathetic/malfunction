@@ -4,3 +4,6 @@ node_modules/
 .wrangler/
 .vscode/
 app.js
+
+# the carnage of all the variants I went through to get this working. RIP as _xxxx files:
+_*

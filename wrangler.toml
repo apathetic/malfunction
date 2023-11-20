@@ -1,6 +1,6 @@
 name = "malfunction"
-main = "index.js"
-compatibility_date = "2023-11-11"
+main = "_workerrr.js"
+compatibility_date = "2023-10-25"
 
 [[kv_namespaces]]
 binding = "FILES"

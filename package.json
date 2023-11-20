@@ -8,6 +8,6 @@
   },
   "scripts": {
     "dev": "wrangler dev                            ## will use wrangler.toml",
-    "pages": "wrangler pages dev ./public ###--kv=FILES  ##   will use /functions + CLI"
+    "pages": "wrangler pages dev ./public --compatibility-date=2023-10-25 ###--kv=FILES  ##   will use /functions + CLI"
   }
 }
